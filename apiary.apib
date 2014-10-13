@@ -1,0 +1,126 @@
+FORMAT: 1A
+HOST: http://lzsibe.caixamagica.pt
+
+# Primeira Liga
+The **Primeira Liga** API is mainly used for the NOS Iris application on NOS STB's
+
+
+# Group General
+Endpoints that are called in any context
+
+
+## Specific game info [/game/{gameid}{?box_id}]
+### Game info [GET]
+
+Images:
+
+Using the standard markup language, with no image scaling:
+
+![Caixa Magica](http://www.caixamagica.pt/sites/default/files/images/inst/JPEG/LogoCMcomp.jpg)
+
+Using pure HTML:
+
+<img src="http://www.caixamagica.pt/sites/default/files/images/inst/JPEG/LogoCMcomp.jpg"  width="200" height="85" alt="Caixa Magica">
+
+
+And now a paragraph in pure HTML, with a table inside...:
+<table>
+    <tr>
+        <td>Foo</td>
+        <td>Another FOO</td>
+    </tr>
+    <tr>
+        <td>1</td>
+        <td>100</td>
+    </tr>
+</table>
+
+For a more descriptive meaning of possible values/responses, we can use a table like this:
+
+| Origin       | Expected response |
+| ------------ |:-----------------:|
+| STB          | Response 1 - The resuls take in account only STB and the result is not formated |
+| External     | Response 2 - If from external IP no results             |
+| Internal     | Response 3 - The json result is formated for better reading    |
+
+
++ Parameters
+    + gameid (required, string, `2a42db31-d0bf-4ad5-ae5b-2d9323ce0f2a`) ... REST parameter with the identification of the game
+    + box_id (required, number, `012945678900`) ... Query string with a numeric `box_id` of the mac address of the STB asking for the info.
+
++ Response 200 (application/json; charset=utf-8)
+
+        {"game_id":"2a42db31-d0bf-4ad5-ae5b-2d9323ce0f2a","game_uri":"/game/2a42db31-d0bf-4ad5-ae5b-2d9323ce0f2a","date_time":"2014-09-22T19:00:00.000Z","home_team":"Académica","home_team_id":"833f84ea-3ec9-4806-a35f-6d8eaa1cdd4c","home_team_refname":"associacao_academica_coimbra_oaf","away_team":"Estoril","away_team_id":"cd711baa-ede1-496d-94a5-7d4a7fc95655","away_team_refname":"grupo_desportivo_estoril_praia","gameday":"5ª Jornada"}
+        
++ Response 200 (application/json; charset=utf-8)
+
+        {}
+        
++ Response 200 (application/json; charset=utf-8)
+
+        {
+        "game_id": "2a42db31-d0bf-4ad5-ae5b-2d9323ce0f2a",
+        "game_uri": "/game/2a42db31-d0bf-4ad5-ae5b-2d9323ce0f2a",
+        "date_time": "2014-09-22T19:00:00.000Z",
+        "home_team": "Académica",
+        "home_team_id": "833f84ea-3ec9-4806-a35f-6d8eaa1cdd4c",
+        "home_team_refname": "associacao_academica_coimbra_oaf",
+        "away_team": "Estoril",
+        "away_team_id": "cd711baa-ede1-496d-94a5-7d4a7fc95655",
+        "away_team_refname": "grupo_desportivo_estoril_praia",
+        "gameday": "5ª Jornada"
+        }
+
+        
++ Response 500 
+
+        Game does not exist
+
+# Group Online
+Endpoints to be called by the **online** mode only.
+
+The **online** mode is the bar that appears on the bottom on the screen when a game is playing live on a given channel. 
+
+# Group Offline
+Endpoints to be called by the **offline** mode only
+
+The **offline** mode the the standard app that is called throught the IRIS interface App menus.
+
+## Initial offline call [/offline]
+### Get news, user status and games [GET]
++ Response 200 (application/json)
+
+        [{
+          "id": 1, "title": "Jogging in park"
+        }, {
+          "id": 2, "title": "Pick-up posters from post-office"
+        }]
+
+### Create a Note [POST]
++ Request (application/json)
+
+        { "title": "Buy cheese and bread for breakfast." }
+
++ Response 201 (application/json)
+
+        { "id": 3, "title": "Buy cheese and bread for breakfast." }
+
+## Note [/notes/{id}]
+A single Note object with all its details
+
++ Parameters
+    + id (required, number, `1`) ... Numeric `id` of the Note to perform action with. Has example value.
+
+### Retrieve a Note [GET]
++ Response 200 (application/json)
+
+    + Header
+
+            X-My-Header: The Value
+
+    + Body
+
+            { "id": 2, "title": "Pick-up posters from post-office" }
+
+### Remove a Note [DELETE]
++ Response 204
